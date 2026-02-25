@@ -3,32 +3,34 @@ import java.util.ArrayDeque;
 
 public class PalindromeCheckerApp {
 
-    // Recursive function to check palindrome
-    static boolean isPalindrome(String str, int start, int end) {
-        // Base case: If start >= end, all characters matched
-        if (start >= end) {
-            return true;
+    static boolean isPalindrome(String str) {
+        int start = 0;
+        int end = str.length() - 1;
+
+        while (start < end) {
+            if (str.charAt(start) != str.charAt(end)) {
+                return false;
+            }
+            start++;
+            end--;
         }
 
-        // If characters at start and end do not match
-        if (str.charAt(start) != str.charAt(end)) {
-            return false;
-        }
-
-        // Recursive call: check inner substring
-        return isPalindrome(str, start + 1, end - 1);
+        return true;
     }
 
     public static void main(String[] args) {
 
-        // Hardcoded string to check
-        String word = "level";
+        // Hardcoded string to check (can include spaces & mixed case)
+        String input = "A man a plan a canal Panama";
 
-        // Step 1: Call recursive function
-        if (isPalindrome(word, 0, word.length() - 1)) {
-            System.out.println("The word \"" + word + "\" is a Palindrome.");
+        // Step 1: Normalize string: remove spaces & convert to lower case
+        String normalized = input.replaceAll("\\s+", "").toLowerCase();
+
+        // Step 2: Check palindrome
+        if (isPalindrome(normalized)) {
+            System.out.println("The phrase \"" + input + "\" is a Palindrome (case & space ignored).");
         } else {
-            System.out.println("The word \"" + word + "\" is NOT a Palindrome.");
+            System.out.println("The phrase \"" + input + "\" is NOT a Palindrome (case & space ignored).");
         }
 
         System.out.println("Program executed successfully!");
