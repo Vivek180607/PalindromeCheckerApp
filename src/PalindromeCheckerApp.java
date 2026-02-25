@@ -4,35 +4,40 @@ import java.util.ArrayDeque;
 public class PalindromeCheckerApp {
 
     public static void main(String[] args) {
+        // Example word to check for palindrome
+        String word = "level";
 
-        // Define the input string
-        String input = "refer";
-
-        // Create a Deque to store characters
-        Deque<Character> deque = new ArrayDeque<>();
-
-        // Add each character to the deque
-        for (char c : input.toCharArray()) {
-            deque.addLast(c);
+        // Check if the word is a palindrome using a helper method
+        if (isPalindrome(word)) {
+            System.out.println("The word \"" + word + "\" is a Palindrome.");
+        } else {
+            System.out.println("The word \"" + word + "\" is NOT a Palindrome.");
         }
 
-        // Flag to track palindrome result
-        boolean isPalindrome = true;
+        System.out.println("Program executed successfully!");
+    }
 
-        // Continue comparison while more than one element exists
-        while (deque.size() > 1) {
+    /**
+     * Method to check if a word is a palindrome.
+     * @param word the input string
+     * @return true if the word is a palindrome, false otherwise
+     */
+    static boolean isPalindrome(String word) {
+        // Convert string to char array
+        char[] chars = word.toCharArray();
 
-            char front = deque.removeFirst();
-            char rear = deque.removeLast();
+        int start = 0;
+        int end = chars.length - 1;
 
-            if (front != rear) {
-                isPalindrome = false;
-                break;
+        // Compare characters from both ends
+        while (start < end) {
+            if (chars[start] != chars[end]) {
+                return false; // Early exit if mismatch found
             }
+            start++;
+            end--;
         }
 
-        // Display result
-        System.out.println("Input : " + input);
-        System.out.println("Is Palindrome? : " + isPalindrome);
+        return true; // Palindrome if all checks passed
     }
 }
