@@ -1,36 +1,44 @@
 import java.util.Deque;
 import java.util.ArrayDeque;
+import java.util.Stack;
 
 public class PalindromeCheckerApp {
 
-    static boolean isPalindrome(String str) {
-        int start = 0;
-        int end = str.length() - 1;
+    static class PalindromeChecker {
 
-        while (start < end) {
-            if (str.charAt(start) != str.charAt(end)) {
-                return false;
+        // Method to check if a string is a palindrome
+        public boolean checkPalindrome(String word) {
+            if (word == null || word.isEmpty()) return false;
+
+            Stack<Character> stack = new Stack<>();
+            // Push all characters onto the stack
+            for (int i = 0; i < word.length(); i++) {
+                stack.push(word.charAt(i));
             }
-            start++;
-            end--;
-        }
 
-        return true;
+            // Pop characters to build reversed string
+            String reversed = "";
+            while (!stack.isEmpty()) {
+                reversed += stack.pop();
+            }
+
+            return word.equals(reversed);
+        }
     }
 
     public static void main(String[] args) {
 
-        // Hardcoded string to check (can include spaces & mixed case)
-        String input = "A man a plan a canal Panama";
+        // Step 1: Create PalindromeChecker object
+        PalindromeChecker checker = new PalindromeChecker();
 
-        // Step 1: Normalize string: remove spaces & convert to lower case
-        String normalized = input.replaceAll("\\s+", "").toLowerCase();
+        // Step 2: Test with a hardcoded string
+        String word = "deed";
 
-        // Step 2: Check palindrome
-        if (isPalindrome(normalized)) {
-            System.out.println("The phrase \"" + input + "\" is a Palindrome (case & space ignored).");
+        // Step 3: Call checkPalindrome() method
+        if (checker.checkPalindrome(word)) {
+            System.out.println("The word \"" + word + "\" is a Palindrome.");
         } else {
-            System.out.println("The phrase \"" + input + "\" is NOT a Palindrome (case & space ignored).");
+            System.out.println("The word \"" + word + "\" is NOT a Palindrome.");
         }
 
         System.out.println("Program executed successfully!");
