@@ -1,45 +1,82 @@
 import java.util.Deque;
-import java.util.ArrayDeque;
+import java.util.LinkedList;
 import java.util.Stack;
 
-public class PalindromeCheckerApp {
+// Strategy interface
+interface PalindromeStrategy {
+    boolean isPalindrome(String word);
+}
 
-    static class PalindromeChecker {
-
-        // Method to check if a string is a palindrome
-        public boolean checkPalindrome(String word) {
-            if (word == null || word.isEmpty()) return false;
-
-            Stack<Character> stack = new Stack<>();
-            // Push all characters onto the stack
-            for (int i = 0; i < word.length(); i++) {
-                stack.push(word.charAt(i));
-            }
-
-            // Pop characters to build reversed string
-            String reversed = "";
-            while (!stack.isEmpty()) {
-                reversed += stack.pop();
-            }
-
-            return word.equals(reversed);
+// Stack-based strategy
+class StackStrategy implements PalindromeStrategy {
+    @Override
+    public boolean isPalindrome(String word) {
+        Stack<Character> stack = new Stack<>();
+        for (char ch : word.toCharArray()) {
+            stack.push(ch);
         }
+        String reversed = "";
+        while (!stack.isEmpty()) {
+            reversed += stack.pop();
+        }
+        return word.equals(reversed);
     }
+}
+
+// Deque-based strategy
+class DequeStrategy implements PalindromeStrategy {
+    @Override
+    public boolean isPalindrome(String word) {
+        Deque<Character> deque = new LinkedList<>();
+        for (char ch : word.toCharArray()) {
+            deque.addLast(ch);
+        }
+        while (deque.size() > 1) {
+            if (deque.removeFirst() != deque.removeLast()) {
+                return false;
+            }
+        }
+        return true;
+    }
+}
+
+// Context class
+class PalindromeContext {
+    private PalindromeStrategy strategy;
+
+    // Inject strategy at runtime
+    public void setStrategy(PalindromeStrategy strategy) {
+        this.strategy = strategy;
+    }
+
+    public boolean executeStrategy(String word) {
+        if (strategy == null) {
+            throw new IllegalStateException("No strategy set!");
+        }
+        return strategy.isPalindrome(word);
+    }
+}
+
+// Main application
+public class PalindromeCheckerApp {
 
     public static void main(String[] args) {
 
-        // Step 1: Create PalindromeChecker object
-        PalindromeChecker checker = new PalindromeChecker();
+        // Hardcoded string to check
+        String word = "rotor";
 
-        // Step 2: Test with a hardcoded string
-        String word = "deed";
+        // Create context
+        PalindromeContext context = new PalindromeContext();
 
-        // Step 3: Call checkPalindrome() method
-        if (checker.checkPalindrome(word)) {
-            System.out.println("The word \"" + word + "\" is a Palindrome.");
-        } else {
-            System.out.println("The word \"" + word + "\" is NOT a Palindrome.");
-        }
+        // Step 1: Choose Stack strategy dynamically
+        context.setStrategy(new StackStrategy());
+        System.out.println("Using Stack Strategy:");
+        System.out.println(word + " -> " + (context.executeStrategy(word) ? "Palindrome" : "Not Palindrome"));
+
+        // Step 2: Choose Deque strategy dynamically
+        context.setStrategy(new DequeStrategy());
+        System.out.println("Using Deque Strategy:");
+        System.out.println(word + " -> " + (context.executeStrategy(word) ? "Palindrome" : "Not Palindrome"));
 
         System.out.println("Program executed successfully!");
     }
